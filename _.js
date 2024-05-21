@@ -18,7 +18,10 @@ try {
           datasets: [{
             label: 'Stock Price',
             data: [], // Stock prices
-            borderColor: 'blue',
+            borderColor: 'lightblue',
+            backgroundColor: 'rgba(0, 0, 255, 1)',
+            borderWidth: 2,
+            pointRadius: 0,
             fill: false
           }]
         },
