@@ -1,0 +1,28 @@
+
+    /* CSS Styles */
+    .container {
+        display: flex;
+      }
+  
+      .chart-container {
+        flex: 1;
+        padding: 20px;
+      }
+  
+      .editor-container {
+        width: 300px;
+        padding: 20px;
+        background-color: #f0f0f0;
+      }
+  
+      .option-leg {
+        margin-bottom: 10px;
+        padding: 10px;
+        background-color: #fff;
+        border: 1px solid #ccc;
+        cursor: move;
+      }
+  
+      .profit-zone {
+        background-color: rgba(0, 255, 0, 0.3);
+      }
