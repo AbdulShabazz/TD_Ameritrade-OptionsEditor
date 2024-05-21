@@ -1,1 +1,1 @@
-## ChartJS Library
+## ChartJS Minified Distribution Library
