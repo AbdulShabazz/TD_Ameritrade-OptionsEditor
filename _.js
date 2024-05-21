@@ -42,6 +42,11 @@ try {
           }
         }
       });
+
+        // Register the chart canvas as a drop target
+        chartCanvas.addEventListener('dragover', handleDragOver);
+        chartCanvas.addEventListener('drop', handleDrop);
+
     }
 
     // Add an option leg to the editor
@@ -49,6 +54,7 @@ try {
       const optionLeg = document.createElement('div');
       optionLeg.classList.add('option-leg');
       optionLeg.draggable = true;
+      optionLeg.id = `option-leg-${Date.now()}`; // Assign a unique id
       optionLeg.innerHTML = `
         <select>
           <option value="call">CALL</option>
@@ -89,23 +95,46 @@ try {
       event.dataTransfer.setData('text/plain', event.target.id);
     }
 
+    // Handle drag over event on the chart canvas
     function handleDragOver(event) {
-      event.preventDefault();
-    }
+        event.preventDefault();
+        event.dataTransfer.dropEffect = 'copy';
+    }    
 
+    // Handle drop event on the chart canvas
     function handleDrop(event) {
-      event.preventDefault();
-      const optionLegId = event.dataTransfer.getData('text');
-      const optionLeg = document.getElementById(optionLegId);
-      optionLegContainer.appendChild(optionLeg);
-      updateChart();
+        event.preventDefault();
+        const optionLegId = event.dataTransfer.getData('text');
+        const optionLeg = document.getElementById(optionLegId);
+    
+        // Get the option leg parameters
+        const optionType = optionLeg.querySelector('select').value;
+        const strikePrice = parseFloat(optionLeg.querySelector('input[placeholder="Strike Price"]').value);
+        const cost = parseFloat(optionLeg.querySelector('input[placeholder="Cost"]').value);
+        const expirationDate = new Date(optionLeg.querySelector('input[type="date"]').value);
+        const isBuy = optionLeg.querySelector('input[type="checkbox"]').checked;
+    
+        // Create an option leg object
+        const newOptionLeg = {
+            type: optionType,
+            strikePrice: strikePrice,
+            cost: cost,
+            expirationDate: expirationDate,
+            isBuy: isBuy
+        };
+    
+        // Add the option leg to the array
+        optionLegs.push(newOptionLeg);
+    
+        // Update the chart
+        updateChart();
     }
 
     // Event listeners
     addOptionLegButton.addEventListener('click', addOptionLeg);
     optionLegContainer.addEventListener('dragstart', handleDragStart);
-    optionLegContainer.addEventListener('dragover', handleDragOver);
-    optionLegContainer.addEventListener('drop', handleDrop);
+    //optionLegContainer.addEventListener('dragover', handleDragOver);
+    //optionLegContainer.addEventListener('drop', handleDrop);
 
     // Initialize the chart and add initial option legs
     initializeChart();
