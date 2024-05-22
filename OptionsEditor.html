@@ -15,6 +15,41 @@
       <button id="addOptionLegButton">New Option Leg</button>
     </div>
   </div>
+  <div class="container" style="width:75%;">
+      <p><b>Note:</b> Buying a PUT option is not the same as selling a CALL option; and selling a CALL option is not the same as buying a PUT option. <br/> <br/>
+        While the payoff structures might be similar under certain conditions, such as when the underlying asset's price remains stable, buying and selling options are distinct strategies with different rights, obligations, and risks involved. 
+      <ol>
+        <h3> Buying a PUT option versus selling a CALL option</h3>
+          <li>
+              <strong>Rights and obligations:</strong> When you buy a put option, you have the right (but not the obligation) to sell the underlying asset at a specified price (strike price) by a certain date (expiration). When you sell a call option, you have the obligation to sell the underlying asset at the strike price if the option is exercised by the buyer.
+          </li>
+          <li>
+              <strong>Profit potential and loss risk:</strong> When buying a put, your potential profit is limited to the difference between the strike price and the underlying asset's price (minus the premium paid), while your maximum loss is limited to the premium paid. When selling a call, your maximum profit is limited to the premium received, but your potential loss is theoretically unlimited as the underlying asset's price can rise indefinitely.
+          </li>
+          <li>
+              <strong>Market sentiment:</strong> Buying a put is typically done when you expect the price of the underlying asset to fall, as it allows you to sell at a higher price than the market. Selling a call is often done when you expect the price to remain stable or fall slightly, as you keep the premium if the option is not exercised.
+          </li>
+          <li>
+              <strong>Initial cash flow:</strong> When buying a put, you pay the premium upfront, resulting in a negative cash flow. When selling a call, you receive the premium upfront, resulting in a positive cash flow.
+          </li>
+      </ol>
+
+    <ol>
+        <h3> Buying a CALL option versus selling a PUT option</h3>
+        <li>
+            <strong>Rights and obligations:</strong> When you sell a call option, you have the obligation to sell the underlying asset at a specified price (strike price) if the option is exercised by the buyer. When you buy a put option, you have the right (but not the obligation) to sell the underlying asset at the strike price by a certain date (expiration).
+        </li>
+        <li>
+            <strong>Profit potential and loss risk:</strong> When selling a call, your maximum profit is limited to the premium received, but your potential loss is theoretically unlimited as the underlying asset's price can rise indefinitely. When buying a put, your potential profit is limited to the difference between the strike price and the underlying asset's price (minus the premium paid), while your maximum loss is limited to the premium paid.
+        </li>
+        <li>
+            <strong>Market sentiment:</strong> Selling a call is often done when you expect the price of the underlying asset to remain stable or fall slightly, as you keep the premium if the option is not exercised. Buying a put is typically done when you expect the price to fall, as it allows you to sell at a higher price than the market.
+        </li>
+        <li>
+            <strong>Initial cash flow:</strong> When selling a call, you receive the premium upfront, resulting in a positive cash flow. When buying a put, you pay the premium upfront, resulting in a negative cash flow.
+        </li>
+    </ol>
+  </div>
 <footer>
   <script src="chart.js/dist/chart.umd.js"></script>
   <script src="_.js"></script>
