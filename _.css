@@ -1,32 +1,56 @@
 
     /* CSS Styles */
     .container {
-      display: flex;
+        display: flex;
     }
-
+  
     .chart-container {
-      flex: 1;
-      padding: 20px;
+        flex: 1;
+        padding: 20px;
     }
 
     .editor-container {
-      width: 300px;
-      padding: 20px;
-      background-color: #f0f0f0;
+        width: 300px;
+        padding: 20px;
+        background-color: #f0f0f0;
     }
 
     .option-leg {
-      margin-bottom: 10px;
-      padding: 10px;
-      background-color: #fff;
-      border: 1px solid #ccc;
-      cursor: move;
+        margin-bottom: 10px;
+        padding: 10px;
+        background-color: #fff;
+        border: 1px solid #ccc;
+        cursor: move;
+        position: relative;
+    }
+      
+    .option-leg::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-image: linear-gradient(180deg, #ccc 25%, transparent 25%, transparent 50%, #ccc 50%, #ccc 75%, transparent 75%, transparent);
+        background-size: 10px 10px;
+        opacity: 0.2;
+        pointer-events: none;
+    }
+    
+    .option-leg select,
+    .option-leg input {
+        position: relative;
+        z-index: 2;
     }
 
     .profit-zone {
-      background-color: rgba(0, 255, 0, 0.3);
+        background-color: rgba(0, 255, 0, 0.3);
     }
 
     body {
-      font: caption;
+        font: caption;
+    }
+
+    input {
+        font-weight: bold;
     }
