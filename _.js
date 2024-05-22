@@ -193,7 +193,7 @@ try {
 
         buff = optionLeg.isBuy
           ? populateDatasetBuffer(strikePriceRange.price, strikePriceRange.max, strikePriceRange.price)
-          : populateDatasetBuffer(strikePriceRange.price, strikePriceRange.min, strikePriceRange.price) ;
+          : populateDatasetBuffer(strikePriceRange.min, strikePriceRange.price, strikePriceRange.price) ;
 
         return buff;
     }
