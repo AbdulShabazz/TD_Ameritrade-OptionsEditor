@@ -25,7 +25,7 @@ try {
                 }]
             },
             options: {
-                //responsive: true,
+                responsive: true,
                 scales: {
                     'x': {
                         type: 'linear',
@@ -116,7 +116,7 @@ try {
 
         optionLeg.classList.add('option-leg');
         optionLeg.draggable = true;
-        optionLeg.id = `option-leg-${Date.now()}`; // Assign a unique id
+        optionLeg.id = `option-leg-${Date.now()}`; // Assign a unique id //
         optionLeg.innerHTML = `
           <select>
             <option value="call">CALL</option>
@@ -163,11 +163,6 @@ try {
           vals.push({ x: i+10, y: price });
           highvals.push({ x: i+20, y: LERP(price, max, stepRatio) });
           
-         /*
-          lowvals.push( LERP(min, price, stepRatio) );
-          vals.push( price );
-          highvals.push( LERP(price, max, stepRatio) );
-        */
         }
 
         const rbuff = [...lowvals, ...vals, ...highvals];
@@ -197,8 +192,8 @@ try {
         const strikePriceRange = determineOptionType(optionLeg);
 
         buff = optionLeg.isBuy
-          ? populateDatasetBuffer(strikePriceRange.min, strikePriceRange.max, strikePriceRange.price)
-          : populateDatasetBuffer(strikePriceRange.max, strikePriceRange.min, strikePriceRange.price) ;
+          ? populateDatasetBuffer(strikePriceRange.price, strikePriceRange.max, strikePriceRange.price)
+          : populateDatasetBuffer(strikePriceRange.price, strikePriceRange.min, strikePriceRange.price) ;
 
         return buff;
     }
@@ -211,10 +206,10 @@ try {
         let lastVal = buff[I-1].y;
         const step = buff[I-1].y - buff[I-2].y;
 
-        while(I <= optionLeg.expirationDate) {
+        while((I <= optionLeg.expirationDate) && (lastVal > 0)) {
             let nextVal = lastVal + step;
 
-            buff.push({ x: I, y: nextVal });
+            (nextVal > 0) && buff.push({ x: I, y: nextVal });
 
             lastVal = nextVal;
             ++I;
@@ -295,8 +290,6 @@ try {
 
         });
 
-        //chart.data.datasets = profitZoneDataset.data;
-
         chart.update();
     }
 
@@ -315,7 +308,10 @@ try {
     function handleDrop(event) {
         event.preventDefault();
         const optionLegId = event.dataTransfer.getData('text');
-        const optionLeg = document.getElementById(optionLegId);
+        const optionLeg = document.getElementById(optionLegId);  
+        
+        // Recover the unique identifier for the dropped option leg instance
+        const uniqueId = optionLeg.id;
 
         // Get the option leg parameters
         const optionType = optionLeg.querySelector('select').value;
@@ -327,12 +323,15 @@ try {
 
         // Create an option leg object
         const newOptionLeg = {
+            id: uniqueId,
             type: optionType,
             strikePrice: strikePrice,
             cost: cost,
             expirationDate: expirationDate,
             isBuy: isBuy
         };
+
+        optionLegs = optionLegs.filter(leg => leg.id != uniqueId);
 
         // Add the option leg to the array
         optionLegs.push(newOptionLeg);
@@ -341,9 +340,26 @@ try {
         updateChart();
     }
 
+    function handleRemoveButtonClick(event) {
+        if (event.target.classList.contains('remove-btn')) {
+            const optionLeg = event.target.closest('.option-leg');
+            const optionLegId = optionLeg.id;
+        
+            // Remove the option leg from the DOM
+            optionLeg.remove();
+        
+            // Remove the corresponding option leg data from the optionLegs array
+            optionLegs = optionLegs.filter(leg => leg.id != optionLegId);
+        
+            // Update the chart
+            updateChart();
+        }
+    }
+
     // Event listeners
     addOptionLegButton.addEventListener('click', addOptionLeg);
     optionLegContainer.addEventListener('dragstart', handleDragStart);
+    optionLegContainer.addEventListener('click', handleRemoveButtonClick);
 
     // Initialize the chart and add initial option legs
     initializeChart();
@@ -352,3 +368,49 @@ try {
 } catch (e) {
     console.log(e);
 }
+
+/*
+
+There are several formulas and models used to calculate the theoretical price of an option and estimate how its price decays over time. One of the most widely used models is the Black-Scholes-Merton (BSM) option pricing model.
+
+The Black-Scholes-Merton formula for calculating the theoretical price of a European-style call option is as follows:
+
+```
+C = S * N(d1) - K * e^(-r * T) * N(d2)
+
+where:
+C = Call option price
+S = Current stock price
+K = Strike price of the option
+r = Risk-free interest rate
+T = Time to expiration (in years)
+e = Mathematical constant (approximately 2.71828)
+N(x) = Standard normal cumulative distribution function
+d1 = (ln(S/K) + (r + σ^2/2) * T) / (σ * sqrt(T))
+d2 = d1 - σ * sqrt(T)
+σ = Implied volatility of the stock
+```
+
+The Black-Scholes-Merton formula for calculating the theoretical price of a European-style put option is:
+
+```
+P = K * e^(-r * T) * N(-d2) - S * N(-d1)
+
+where:
+P = Put option price
+The other variables are the same as in the call option formula.
+```
+
+These formulas take into account several key factors that influence option prices, including the current stock price, strike price, time to expiration, risk-free interest rate, and implied volatility.
+
+Regarding the way option prices decay over time, the concept of "time decay" or "theta decay" is important. The time value of an option decreases as the expiration date approaches, assuming all other factors remain constant. This decay accelerates as the option gets closer to expiration.
+
+The Greek letter "theta" (θ) is used to measure the rate of change in an option's price with respect to the passage of time. Theta is typically expressed as the amount an option's price will decrease by per day, assuming all other variables remain constant.
+
+The Black-Scholes-Merton model can be used to estimate theta by taking the partial derivative of the option price with respect to time. The formula for theta is complex and depends on various inputs, such as the current stock price, strike price, time to expiration, risk-free interest rate, and implied volatility.
+
+It's important to note that while the Black-Scholes-Merton model is widely used, it has some limitations and assumptions, such as constant volatility and the absence of dividends. Other models, such as the binomial option pricing model and the Heston model, have been developed to address some of these limitations and incorporate additional factors.
+
+In practice, option prices are influenced by various market factors, including supply and demand, market sentiment, and changes in the underlying stock price. Market participants use a combination of theoretical models and market observations to determine option prices.
+
+*/
