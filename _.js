@@ -240,10 +240,30 @@ try {
         
     }
 
+    function priceIncreaseBuyStrategy (
+          callOptionFlag
+        , putOptionFlag
+        , isBuyingFlag
+        , isSellingFlag
+        , put_FILL
+        , call_FILL) {            
+
+            let ret = false; // isSellingFlag == true; ie. return ret; //
+
+            if (isBuyingFlag) {
+                ret = callOptionFlag 
+                    ? call_FILL
+                    : put_FILL ;
+            }
+
+            return ret;
+
+    }
+
     // Update the chart based on the option legs
     function updateChart() {
         // Clear existing profit zones
-        chart.data.datasets = []; //chart.data.datasets.filter(dataset => dataset.label !== 'Profit Zone');
+        chart.data.datasets = [];
 
         const put_FILL = 'start';
         const call_FILL = 'end';
@@ -272,7 +292,13 @@ try {
                 data: buildDataSet(optionLeg), // Calculate profit zone data based on option leg parameters
                 backgroundColor: 'rgba(0, 255, 0, 0.3)',
                 borderColor: 'green',
-                fill: priceIncreaseStrategyFlag ? call_FILL : put_FILL,
+                fill: priceIncreaseBuyStrategy (
+                    callOptionFlag
+                  , putOptionFlag
+                  , isBuyingFlag
+                  , isSellingFlag
+                  , put_FILL
+                  , call_FILL),
                 yAxisID: 'y',
                 xAxisID: 'x'
             };
